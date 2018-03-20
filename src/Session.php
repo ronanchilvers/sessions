@@ -2,7 +2,9 @@
 
 namespace Ronanchilvers\Sessions;
 
-use Ronanchilvers\Sessions\StorageInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Ronanchilvers\Sessions\Storage\StorageInterface;
 
 /**
  * Session helper class
@@ -30,5 +32,67 @@ class Session
     {
         $this->storage = $storage;
     }
-}
 
+    /**
+     * Initialise the session
+     *
+     * @param Psr\Http\Message\ServerRequestInterface $request
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function initialise(ServerRequestInterface $request)
+    {
+        $this->data = $this->storage->initialise($request);
+    }
+
+    /**
+     * Shutdown the session
+     *
+     * @param Psr\Http\Message\ResponseInterface $response
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function shutdown(ResponseInterface $response)
+    {
+        $this->storage->shutdown($this->data, $response);
+    }
+
+    /**
+     * Set a session variable
+     *
+     * @param string $key
+     * @param mixed $value
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function set($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
+
+    /**
+     * Get a session value by key
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function get($key, $default = null)
+    {
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
+        }
+
+        return $default;
+    }
+
+    /**
+     * Does the session have a key?
+     *
+     * @param string $key
+     * @return boolean
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function has($key)
+    {
+        return isset($this->data[$key]);
+    }
+}
