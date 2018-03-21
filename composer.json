@@ -23,7 +23,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Ronanchilvers\\Sessions\\Tests\\": "tests"
+            "Ronanchilvers\\Sessions\\Test\\": "tests"
         }
     }
 }

@@ -48,11 +48,12 @@ class Session
      * Shutdown the session
      *
      * @param Psr\Http\Message\ResponseInterface $response
+     * @return Psr\Http\Message\ResponseInterface
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function shutdown(ResponseInterface $response)
     {
-        $this->storage->shutdown($this->data, $response);
+        return $this->storage->shutdown($this->data, $response);
     }
 
     /**

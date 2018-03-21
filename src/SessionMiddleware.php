@@ -38,7 +38,7 @@ class SessionMiddleware
     {
         $this->session->initialise($request);
         $response = $next($request, $response);
-        $this->session->shutdown($response);
+        $response = $this->session->shutdown($response);
 
         return $response;
     }

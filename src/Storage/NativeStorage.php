@@ -65,5 +65,7 @@ class NativeStorage implements StorageInterface
     public function shutdown(array $data, ResponseInterface $response)
     {
         $_SESSION = $data;
+
+        return $response;
     }
 }

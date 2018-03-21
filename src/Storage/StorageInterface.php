@@ -28,6 +28,7 @@ interface StorageInterface
      *
      * @param array $data
      * @param Psr\Http\Message\ResponseInterface $response
+     * @return Psr\Http\Message\ResponseInterface
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function shutdown(array $data, ResponseInterface $response);
