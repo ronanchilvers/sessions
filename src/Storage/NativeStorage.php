@@ -54,7 +54,7 @@ class NativeStorage implements StorageInterface
         session_cache_limiter($this->settings['cache_limiter']);
         session_start();
 
-        $data = (session_status() == PHP_SESSION_ACTIVE) ? $_SESSION : [];
+        $data = (isset($_SESSION)) ? $_SESSION : [];
 
         return $data;
     }

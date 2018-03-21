@@ -13,35 +13,28 @@ use Ronanchilvers\Sessions\Test\TestCase;
 class NativeStorageTest extends TestCase
 {
     /**
-     * Test that initialising NativeStorage starts the session
+     * Setup the $_SESSION super global
      *
-     * @test
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function testInitialiseStartsSession()
+    protected function setUp()
     {
-        $request = $this->mockRequest();
-        $storage = new NativeStorage();
-        @$storage->initialise($request); // Silence cookie warnings
-
-        $this->assertEquals(PHP_SESSION_ACTIVE, session_status());
+        $_SESSION = [];
     }
 
     /**
      * Test that initialise returns the current session data
      *
      * @test
+     * @group current
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function testInitialiseReturnsCurrentSessionData()
     {
-        $data = [
-            'foo' => 'bar'
-        ];
         $request = $this->mockRequest();
         $storage = new NativeStorage();
 
-        $_SESSION = $data;
+        $data = $_SESSION;
         $return = @$storage->initialise($request); // Silence cookie warnings
 
         $this->assertEquals($data, $return);
@@ -55,9 +48,7 @@ class NativeStorageTest extends TestCase
      */
     public function testShutdownSetsTheSessionData()
     {
-        $data = [
-            'foo' => 'bar'
-        ];
+        $data = $_SESSION;
         $response = $this->mockResponse();
         $storage = new NativeStorage();
         $return = $storage->shutdown($data, $response);
