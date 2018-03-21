@@ -86,6 +86,18 @@ class Session
     }
 
     /**
+     * Delete a session key
+     *
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function delete($key)
+    {
+        if ($this->has($key)) {
+            unset($this->data[$key]);
+        }
+    }
+
+    /**
      * Does the session have a key?
      *
      * @param string $key
