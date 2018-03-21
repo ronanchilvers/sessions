@@ -16,7 +16,7 @@ class Session
     /**
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * @var Ronanchilvers\Sessions\StorageInterface
