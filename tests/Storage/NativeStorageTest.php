@@ -26,7 +26,6 @@ class NativeStorageTest extends TestCase
      * Test that initialise returns the current session data
      *
      * @test
-     * @group current
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function testInitialiseReturnsCurrentSessionData()
