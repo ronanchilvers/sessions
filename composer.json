@@ -16,6 +16,9 @@
     "require-dev": {
         "phpunit/phpunit": "^6.0"
     },
+    "suggests": {
+        "dflydev/fig-cookies": "To use cookie based storage"
+    },
     "autoload": {
         "psr-4": {
             "Ronanchilvers\\Sessions\\": "src"
