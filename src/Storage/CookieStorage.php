@@ -8,6 +8,7 @@ use Defuse\Crypto\Key;
 use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\SetCookie;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ronanchilvers\Sessions\Storage\StorageInterface;
@@ -119,10 +120,7 @@ class CookieStorage implements StorageInterface
     protected function getKey()
     {
         if (!$this->key instanceof Key) {
-            if (false === ($key = $this->settings['encryption.key'])) {
-                throw new Exception('Invalid key - have you configured one yet?');
-            }
-            $this->key = Key::loadFromAsciiSafeString($key);
+            $this->key = Key::loadFromAsciiSafeString($this->settings['encryption.key']);
         }
         return $this->key;
     }
