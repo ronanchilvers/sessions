@@ -17,7 +17,8 @@
         "phpunit/phpunit": "^6.0"
     },
     "suggests": {
-        "dflydev/fig-cookies": "To use cookie based storage"
+        "dflydev/fig-cookies": "To use cookie based storage",
+        "defuse/php-encryption": "To encrypt cookie based storage"
     },
     "autoload": {
         "psr-4": {

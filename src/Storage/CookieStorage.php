@@ -2,6 +2,9 @@
 
 namespace Ronanchilvers\Sessions\Storage;
 
+use Defuse\Crypto\Crypto;
+use Defuse\Crypto\Exception\WrongKeyOrModifiedCiphertextException;
+use Defuse\Crypto\Key;
 use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\SetCookie;
@@ -24,6 +27,11 @@ class CookieStorage implements StorageInterface
     protected $settings;
 
     /**
+     * @var Defuse\Crypto\Key
+     */
+    protected $key;
+
+    /**
      * Class constructor
      *
      * @author Ronan Chilvers <ronan@d3r.com>
@@ -31,12 +39,13 @@ class CookieStorage implements StorageInterface
     public function __construct($settings = [])
     {
         $defaults = [
-            'name'     => 'app_session',
-            'expire'   => 0,
-            'path'     => '/',
-            'domain'   => null,
-            'secure'   => false,
-            'httponly' => true,
+            'name'           => 'app_session',
+            'expire'         => 0,
+            'path'           => '/',
+            'domain'         => null,
+            'secure'         => false,
+            'httponly'       => true,
+            'encryption.key' => null
         ];
         $this->settings = array_merge(
             $defaults,
@@ -54,8 +63,17 @@ class CookieStorage implements StorageInterface
             $this->settings['name']
         );
         $data = $cookie->getValue();
-        if (!is_null($data)) {
-            $data = @unserialize($data);
+        try {
+            $data = Crypto::decrypt(
+                $data,
+                $this->getKey()
+            );
+            if (!is_null($data)) {
+                $data = @unserialize($data);
+            }
+        } catch (WrongKeyOrModifiedCiphertextException $ex) {
+            // Session is killed
+            $data = null;
         }
         if (!is_array($data)) {
             $data = [];
@@ -70,6 +88,10 @@ class CookieStorage implements StorageInterface
     public function shutdown(array $data, ResponseInterface $response)
     {
         $data = serialize($data);
+        $data = Crypto::encrypt(
+            $data,
+            $this->getKey()
+        );
         $cookie = SetCookie::create(
             $this->settings['name'],
             $data
@@ -86,5 +108,22 @@ class CookieStorage implements StorageInterface
         );
 
         return $response;
+    }
+
+    /**
+     * Get an encryption key object instance
+     *
+     * @return Defuse\Crypto\Key
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    protected function getKey()
+    {
+        if (!$this->key instanceof Key) {
+            if (false === ($key = $this->settings['encryption.key'])) {
+                throw new Exception('Invalid key - have you configured one yet?');
+            }
+            $this->key = Key::loadFromAsciiSafeString($key);
+        }
+        return $this->key;
     }
 }
