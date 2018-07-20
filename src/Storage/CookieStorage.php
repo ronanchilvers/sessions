@@ -78,12 +78,6 @@ class CookieStorage implements StorageInterface
                 // Session is killed
                 $data = null;
             }
-        } catch (TypeError $ex) {
-            // Session is killed
-            $data = null;
-        } catch (WrongKeyOrModifiedCiphertextException $ex) {
-            // Session is killed
-            $data = null;
         }
         if (!is_array($data)) {
             $data = [];
