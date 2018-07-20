@@ -9,6 +9,7 @@ use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\SetCookie;
 use Exception;
+use TypeError;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ronanchilvers\Sessions\Storage\StorageInterface;
@@ -72,6 +73,9 @@ class CookieStorage implements StorageInterface
             if (!is_null($data)) {
                 $data = @unserialize($data);
             }
+        } catch (TypeError $ex) {
+            // Session is killed
+            $data = null;
         } catch (WrongKeyOrModifiedCiphertextException $ex) {
             // Session is killed
             $data = null;
