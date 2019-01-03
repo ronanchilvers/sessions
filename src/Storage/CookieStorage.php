@@ -65,12 +65,14 @@ class CookieStorage implements StorageInterface
         );
         $data = $cookie->getValue();
         try {
-            $data = Crypto::decrypt(
-                $data,
-                $this->getKey()
-            );
-            if (!is_null($data)) {
-                $data = @unserialize($data);
+            if (!empty($data)) {
+                $data = Crypto::decrypt(
+                    $data,
+                    $this->getKey()
+                );
+                if (!is_null($data)) {
+                    $data = @unserialize($data);
+                }
             }
         } catch (WrongKeyOrModifiedCiphertextException $ex) {
             // Session is killed
