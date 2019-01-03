@@ -108,4 +108,58 @@ class Session
     {
         return isset($this->data[$key]);
     }
+
+    /**
+     * Set a flash message
+     *
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function flash($message, $type = 'info')
+    {
+        if (!isset($this->data['flash'])) {
+            $this->data['flash'] = [];
+        }
+        if (!isset($this->data['flash'][$type])) {
+            $this->data['flash'][$type] = [];
+        }
+        $this->data['flash'][$type][] = $message;
+    }
+
+    /**
+     * Get a set of flash messages for a given type
+     *
+     * @param string $type
+     * @return mixed
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function getFlash($type)
+    {
+        if (!isset($this->data['flash'], $this->data['flash'][$type])) {
+            return null;
+        }
+        if (empty($this->data['flash'][$type])) {
+            return null;
+        }
+        $messages = $this->data['flash'][$type];
+        unset($this->data['flash'][$type]);
+
+        return $messages;
+    }
+
+    /**
+     * Get all flash messages
+     *
+     * @return array
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    public function getFlashes()
+    {
+        if (!isset($this->data['flash'])) {
+            return null;
+        }
+        $flashes = $this->data['flash'];
+        unset($this->data['flash']);
+
+        return $flashes;
+    }
 }

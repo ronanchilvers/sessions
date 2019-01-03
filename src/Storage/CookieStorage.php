@@ -9,6 +9,7 @@ use Dflydev\FigCookies\FigRequestCookies;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\SetCookie;
 use Exception;
+use TypeError;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Ronanchilvers\Sessions\Storage\StorageInterface;
@@ -64,8 +65,8 @@ class CookieStorage implements StorageInterface
             $this->settings['name']
         );
         $data = $cookie->getValue();
-        try {
-            if (!empty($data)) {
+        if (!is_null($data)) {
+            try {
                 $data = Crypto::decrypt(
                     $data,
                     $this->getKey()
@@ -73,10 +74,10 @@ class CookieStorage implements StorageInterface
                 if (!is_null($data)) {
                     $data = @unserialize($data);
                 }
+            } catch (WrongKeyOrModifiedCiphertextException $ex) {
+                // Session is killed
+                $data = null;
             }
-        } catch (WrongKeyOrModifiedCiphertextException $ex) {
-            // Session is killed
-            $data = null;
         }
         if (!is_array($data)) {
             $data = [];
