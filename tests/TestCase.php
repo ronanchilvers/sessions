@@ -12,7 +12,7 @@ use Ronanchilvers\Sessions\Session;
  *
  * @author Ronan Chilvers <ronan@d3r.com>
  */
-class TestCase extends BaseTestCase
+abstract class TestCase extends BaseTestCase
 {
     /**
      * Get a mock PSR7 request object
@@ -34,5 +34,16 @@ class TestCase extends BaseTestCase
     protected function mockResponse()
     {
         return $this->createMock(ResponseInterface::class);
+    }
+
+    /**
+     * Get a mock session object
+     *
+     * @return Ronanchilvers\Sessions\Session
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    protected function mockSession()
+    {
+        return $this->createMock(Session::class);
     }
 }
