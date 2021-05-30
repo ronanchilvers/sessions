@@ -11,6 +11,7 @@ use Ronanchilvers\Sessions\Test\TestCase;
 /**
  * Test case for cookie based session storage
  *
+ * @group storage
  * @author Ronan Chilvers <ronan@d3r.com>
  */
 class CookieStorageTest extends TestCase

@@ -9,6 +9,7 @@ use Ronanchilvers\Sessions\Test\TestCase;
 /**
  * Base test case for session class
  *
+ * @group session
  * @author Ronan Chilvers <ronan@d3r.com>
  */
 class SessionTest extends TestCase
