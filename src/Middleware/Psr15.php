@@ -1,17 +1,19 @@
 <?php
 
-namespace Ronanchilvers\Sessions;
+namespace Ronanchilvers\Sessions\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Ronanchilvers\Sessions\Session;
 
 /**
- * Middleware to initialise sessions
+ * PSR-15 Middleware to initialise sessions
  *
  * @author Ronan Chilvers <ronan@d3r.com>
  */
-class SessionMiddleware
+class Psr15 implements MiddlewareInterface
 {
     /**
      * @var Ronanchilvers\Sessions\Session
@@ -34,10 +36,10 @@ class SessionMiddleware
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $this->session->initialise($request);
-        $response = $next($request, $response);
+        $response = $handler->handle($request);
         $response = $this->session->shutdown($response);
 
         return $response;
