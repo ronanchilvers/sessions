@@ -3,7 +3,6 @@ on: push
 jobs:
   tests:
     runs-on: ${{ matrix.operating-system }}
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
