@@ -9,7 +9,6 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: ['7.0', '7.1', '7.2', 7.3', '7.4']
-        experimental: ['8.0']
     name: PHP ${{ matrix.php-versions }}
     steps:
     - name: Checkout codebase
@@ -37,11 +36,7 @@ jobs:
     - name: Check Composer Version
       run: composer --version
     - name: Composer Dependencies
-      if: ${{ !matrix.experimental }}
       run: composer install --no-interaction --no-suggest --no-progress --prefer-dist --optimize-autoloader
-    - name: Composer Dependencies Experimental
-      if: ${{ matrix.experimental }}
-      run: composer install --no-interaction --no-suggest --no-progress --prefer-dist --optimize-autoloader --ignore-platform-reqs
     - name: Lint PHP Files
       run: vendor/bin/parallel-lint src
     - name: Run Testsuite
