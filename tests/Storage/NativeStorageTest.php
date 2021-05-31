@@ -8,6 +8,7 @@ use Ronanchilvers\Sessions\Test\TestCase;
 /**
  * Test case for native session storage
  *
+ * @group storage
  * @author Ronan Chilvers <ronan@d3r.com>
  */
 class NativeStorageTest extends TestCase

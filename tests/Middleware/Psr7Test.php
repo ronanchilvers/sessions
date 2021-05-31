@@ -4,28 +4,18 @@ namespace Ronanchilvers\Sessions\Test;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Ronanchilvers\Sessions\Middleware\Psr7;
 use Ronanchilvers\Sessions\Session;
-use Ronanchilvers\Sessions\SessionMiddleware;
 use Ronanchilvers\Sessions\Test\TestCase;
 
 /**
- * Base test case for session middleware class
+ * Base test case for PSR-7 middleware class
  *
+ * @group middleware
  * @author Ronan Chilvers <ronan@d3r.com>
  */
-class SessionMiddlewareTest extends TestCase
+class Psr7Test extends TestCase
 {
-    /**
-     * Get a mock session object
-     *
-     * @return Ronanchilvers\Sessions\Session
-     * @author Ronan Chilvers <ronan@d3r.com>
-     */
-    protected function mockSession()
-    {
-        return $this->createMock(Session::class);
-    }
-
     /**
      * Test that invoking the middleware runs the $next closure
      *
@@ -34,7 +24,7 @@ class SessionMiddlewareTest extends TestCase
      */
     public function testNextClosureIsInvokedByMiddleware()
     {
-        $middleware = new SessionMiddleware($this->mockSession());
+        $middleware = new Psr7($this->mockSession());
         $next = function (ServerRequestInterface $request, ResponseInterface $response) {
             return $response->withStatus(200);
         };
@@ -69,7 +59,7 @@ class SessionMiddlewareTest extends TestCase
                 ->method('initialise')
                 ->with($this->equalTo($request));
 
-        $middleware = new SessionMiddleware($session);
+        $middleware = new Psr7($session);
         $next = function (ServerRequestInterface $request, ResponseInterface $response) {
             return $response->withStatus(200);
         };
@@ -99,7 +89,7 @@ class SessionMiddlewareTest extends TestCase
                 ->method('shutdown')
                 ->with($this->equalTo($response));
 
-        $middleware = new SessionMiddleware($session);
+        $middleware = new Psr7($session);
         $next = function (ServerRequestInterface $request, ResponseInterface $response) {
             return $response->withStatus(200);
         };
