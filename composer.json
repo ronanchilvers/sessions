@@ -16,6 +16,7 @@
     "require-dev": {
         "defuse/php-encryption": "^2.1",
         "dflydev/fig-cookies": "^1.0",
+        "php-parallel-lint/php-parallel-lint": "^1.3",
         "phpunit/phpunit": "^6.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0"
