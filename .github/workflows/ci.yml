@@ -46,13 +46,16 @@ jobs:
     - name: Composer Dependencies (8.0)
       run: composer install --no-interaction --no-suggest --no-progress --prefer-dist --optimize-autoloader --ignore-platform-reqs
       if: matrix.php-versions == '8.0'
+    - name: Prepare build directory
+      run: |
+        [ ! -d build ] && (echo "creating build directory" && mkdir build)
     - name: Lint PHP Files
       run: vendor/bin/parallel-lint src
     - name: Run Testsuite
-      run: vendor/bin/phpunit -c phpunit.xml.dist
+      run: vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/clover.xml
     - name: Upload coverage data
       if: matrix.php-versions == '7.4'
       run: |
         ls -lh build/logs/
         wget https://scrutinizer-ci.com/ocular.phar
-        php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
+        php ocular.phar code-coverage:upload --format=php-clover build/clover.xml
