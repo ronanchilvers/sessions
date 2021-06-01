@@ -149,7 +149,7 @@ class CookieStorageTest extends TestCase
         $response->expects($this->once())
                  ->method('withAddedHeader')
                  ->will(
-                    $this->returnCallback(function ($name, $value) use ($spy, $response) {
+                    $this->returnCallback(function ($name, $value) use ($spyValue, $response) {
                         $spyValue = $value;
 
                         return $response;
@@ -159,11 +159,8 @@ class CookieStorageTest extends TestCase
             'encryption.key' => $this->keyString
         ]);
         $response = $storage->shutdown($data, $response);
-        // $cookieString = $spy->getInvocations()[0]->getParameters()[1];
-        $cookieString = explode(';', $spy);
+        $cookieString = explode(';', $spyValue);
         $cookieString = explode('=', $cookieString[0]);
-        // @TODO Remove var_dump
-        var_dump($cookieString); exit();
         $return = $this->decrypt($cookieString[1]);
 
         $this->assertEquals($return, $data);
