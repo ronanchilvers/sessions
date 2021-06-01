@@ -146,15 +146,14 @@ class CookieStorageTest extends TestCase
                 ->willReturn($response)
                 ;
         $spyValue = '';
+        $callback = function ($name, $value) use ($spyValue, $response) {
+            $spyValue = $value;
+
+            return $response;
+        };
         $response->expects($this->once())
                  ->method('withAddedHeader')
-                 ->will(
-                    $this->returnCallback(function ($name, $value) use ($spyValue, $response) {
-                        $spyValue = $value;
-
-                        return $response;
-                    })
-                 );
+                 ->will($this->returnCallback($callback));
         $storage = new CookieStorage([
             'encryption.key' => $this->keyString
         ]);
