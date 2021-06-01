@@ -29,7 +29,7 @@ class CookieStorage implements StorageInterface
     protected $settings;
 
     /**
-     * @var Defuse\Crypto\Key
+     * @var \Defuse\Crypto\Key
      */
     protected $key;
 
@@ -117,7 +117,7 @@ class CookieStorage implements StorageInterface
     /**
      * Get an encryption key object instance
      *
-     * @return Defuse\Crypto\Key
+     * @return \Defuse\Crypto\Key
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     protected function getKey()
