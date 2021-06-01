@@ -19,7 +19,7 @@ class Session
     protected $data = [];
 
     /**
-     * @var Ronanchilvers\Sessions\StorageInterface
+     * @var \Ronanchilvers\Sessions\Storage\StorageInterface
      */
     protected $storage;
 
@@ -36,7 +36,7 @@ class Session
     /**
      * Initialise the session
      *
-     * @param Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function initialise(ServerRequestInterface $request)
@@ -47,8 +47,8 @@ class Session
     /**
      * Shutdown the session
      *
-     * @param Psr\Http\Message\ResponseInterface $response
-     * @return Psr\Http\Message\ResponseInterface
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function shutdown(ResponseInterface $response)

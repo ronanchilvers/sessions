@@ -33,7 +33,7 @@ class CookieStorageTest extends TestCase
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->key = Key::loadFromAsciiSafeString($this->keyString);
     }
@@ -125,6 +125,7 @@ class CookieStorageTest extends TestCase
      * Test that shutdown sets the session data
      *
      * @test
+     * @group foo
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function testShutdownSetsTheSessionData()
@@ -144,20 +145,22 @@ class CookieStorageTest extends TestCase
                 )
                 ->willReturn($response)
                 ;
-        $response->expects($spy = $this->once())
+        $callback = function ($name, $value) use ($data, $response) {
+            $cookieString = explode(';', $value);
+            $cookieString = explode('=', $cookieString[0]);
+            $decrypted = $this->decrypt($cookieString[1]);
+
+            $this->assertEquals($decrypted, $data);
+
+            return $response;
+        };
+        $response->expects($this->once())
                  ->method('withAddedHeader')
-                ->willReturn($response)
-                ;
+                 ->will($this->returnCallback($callback));
         $storage = new CookieStorage([
             'encryption.key' => $this->keyString
         ]);
         $response = $storage->shutdown($data, $response);
-        $cookieString = $spy->getInvocations()[0]->getParameters()[1];
-        $cookieString = explode(';', $cookieString);
-        $cookieString = explode('=', $cookieString[0]);
-        $return = $this->decrypt($cookieString[1]);
-
-        $this->assertEquals($return, $data);
     }
 
     /**

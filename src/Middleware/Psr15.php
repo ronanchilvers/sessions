@@ -16,14 +16,14 @@ use Ronanchilvers\Sessions\Session;
 class Psr15 implements MiddlewareInterface
 {
     /**
-     * @var Ronanchilvers\Sessions\Session
+     * @var \Ronanchilvers\Sessions\Session
      */
     protected $session;
 
     /**
      * Class constructor
      *
-     * @param Ronanchilvers\Sessions\Session $session
+     * @param \Ronanchilvers\Sessions\Session $session
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     public function __construct(Session $session)

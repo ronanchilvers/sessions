@@ -29,9 +29,9 @@ class CookieStorage implements StorageInterface
     protected $settings;
 
     /**
-     * @var Defuse\Crypto\Key
+     * @var \Defuse\Crypto\Key|null
      */
-    protected $key;
+    protected $key = null;
 
     /**
      * Class constructor
@@ -65,19 +65,19 @@ class CookieStorage implements StorageInterface
             $this->settings['name']
         );
         $data = $cookie->getValue();
-        if (!is_null($data)) {
-            try {
-                $data = Crypto::decrypt(
-                    $data,
-                    $this->getKey()
-                );
-                if (!is_null($data)) {
-                    $data = @unserialize($data);
-                }
-            } catch (WrongKeyOrModifiedCiphertextException $ex) {
-                // Session is killed
-                $data = null;
+        if (is_null($data)) {
+            return [];
+        }
+        try {
+            $data = Crypto::decrypt(
+                $data,
+                $this->getKey()
+            );
+            if (!is_null($data)) {
+                $data = @unserialize($data);
             }
+        } catch (WrongKeyOrModifiedCiphertextException $ex) {
+            $data = null;
         }
         if (!is_array($data)) {
             $data = [];
@@ -89,7 +89,7 @@ class CookieStorage implements StorageInterface
     /**
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function shutdown(array $data, ResponseInterface $response)
+    public function shutdown(array $data, ResponseInterface $response): ResponseInterface
     {
         $data = serialize($data);
         $data = Crypto::encrypt(
@@ -117,7 +117,7 @@ class CookieStorage implements StorageInterface
     /**
      * Get an encryption key object instance
      *
-     * @return Defuse\Crypto\Key
+     * @return \Defuse\Crypto\Key
      * @author Ronan Chilvers <ronan@d3r.com>
      */
     protected function getKey()
