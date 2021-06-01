@@ -89,7 +89,7 @@ class CookieStorage implements StorageInterface
     /**
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function shutdown(array $data, ResponseInterface $response)
+    public function shutdown(array $data, ResponseInterface $response): ResponseInterface
     {
         $data = serialize($data);
         $data = Crypto::encrypt(
