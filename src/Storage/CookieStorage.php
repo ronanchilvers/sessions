@@ -73,9 +73,7 @@ class CookieStorage implements StorageInterface
                 $data,
                 $this->getKey()
             );
-            if (!is_null($data)) {
-                $data = @unserialize($data);
-            }
+            $data = @unserialize($data);
         } catch (WrongKeyOrModifiedCiphertextException $ex) {
             $data = null;
         }
