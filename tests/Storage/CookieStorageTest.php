@@ -145,9 +145,12 @@ class CookieStorageTest extends TestCase
                 )
                 ->willReturn($response)
                 ;
-        $spyValue = '';
-        $callback = function ($name, $value) use ($spyValue, $response) {
-            $spyValue = $value;
+        $callback = function ($name, $value) use ($data, $response) {
+            $cookieString = explode(';', $value);
+            $cookieString = explode('=', $cookieString[0]);
+            $decrypted = $this->decrypt($cookieString[1]);
+
+            $this->assertEquals($decrypted, $data);
 
             return $response;
         };
@@ -158,11 +161,6 @@ class CookieStorageTest extends TestCase
             'encryption.key' => $this->keyString
         ]);
         $response = $storage->shutdown($data, $response);
-        $cookieString = explode(';', $spyValue);
-        $cookieString = explode('=', $cookieString[0]);
-        $return = $this->decrypt($cookieString[1]);
-
-        $this->assertEquals($return, $data);
     }
 
     /**
