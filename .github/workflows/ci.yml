@@ -50,3 +50,7 @@ jobs:
       run: vendor/bin/parallel-lint src
     - name: Run Testsuite
       run: vendor/bin/phpunit -c phpunit.xml.dist
+    - name: Upload coverage data
+      run: |
+        wget https://scrutinizer-ci.com/ocular.phar
+        php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
