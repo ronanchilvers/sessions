@@ -29,9 +29,9 @@ class CookieStorage implements StorageInterface
     protected $settings;
 
     /**
-     * @var \Defuse\Crypto\Key
+     * @var \Defuse\Crypto\Key|null
      */
-    protected $key;
+    protected $key = null;
 
     /**
      * Class constructor
