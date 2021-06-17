@@ -45,7 +45,7 @@ class CookieStorage implements StorageInterface
             'expire'         => 0,
             'path'           => '/',
             'domain'         => null,
-            'secure'         => false,
+            'secure'         => true,
             'httponly'       => true,
             'encryption.key' => null
         ];
